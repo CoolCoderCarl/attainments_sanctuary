@@ -6,6 +6,7 @@ on:
     paths-ignore:
       - 'README.md'
       - '.gitignore'
+      - '.dockerignore'
       - 'changelog.json'
 
 jobs:
@@ -76,7 +77,7 @@ jobs:
           context: .
           push: true
           file: Containerfile
-          tags: h0d0user/news_db:${{ needs.prepare.outputs.get_current_tag }}
+          tags: h0d0user/attainments_sanctuary:${{ needs.prepare.outputs.get_current_tag }}
 
       - name: Notify if failure
         if: ${{ failure() }}
@@ -114,6 +115,6 @@ jobs:
 
             Branch: ${{ github.ref }}
 
-            <b>Pushed image:</b> <code>docker pull h0d0user/news_db:${{ needs.prepare.outputs.get_current_tag }}</code>
+            <b>Pushed image:</b> <code>docker pull h0d0user/attainments_sanctuary:${{ needs.prepare.outputs.get_current_tag }}</code>
 
             See changes: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
