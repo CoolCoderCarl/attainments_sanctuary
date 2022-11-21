@@ -1,0 +1,7 @@
+black
+isort
+fastapi~=0.87.0
+uvicorn~=0.20.0
+requests~=2.28.1
+databases~=0.6.2
+aiosqlite~=0.17.0
