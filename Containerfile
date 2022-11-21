@@ -5,7 +5,7 @@ WORKDIR /opt/
 COPY ["api_db.py", "/opt/"]
 COPY ["news_db.py", "/opt/"]
 
-COPY requirements.txt /opt/requirements.txt
+COPY requirements.txt requirements.txt
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
