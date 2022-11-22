@@ -29,16 +29,16 @@ ndb = news_db.NewsDatabase()
 
 
 @app.get("/healthcheck", status_code=status.HTTP_200_OK)
-async def status():
+async def healthcheck():
     """
-    Healthcheck
+    Healthcheck of API
     :return:
     """
     return {"healthcheck": "True"}
 
 
 @app.get("/news")
-async def fetch_data():
+async def news():
     """
     Get data from DB and return it to API client
     Disconnect
