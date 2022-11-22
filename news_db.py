@@ -1,8 +1,5 @@
-import json
 import logging
 import sqlite3
-import time
-from datetime import datetime
 from pathlib import Path
 from sqlite3 import Error
 
@@ -116,25 +113,4 @@ class NewsDatabase:
 
 
 if __name__ == "__main__":
-    # try:
-    #     conn = create_connection(DB_FILE)
-    #     if DB_FILE.exists():
-    #         create_table(conn, CREATE_TABLE_SQL)
-    #
-    #     while True:
-    #         CURRENT_TIME = datetime.now().strftime("%H:%M")
-    #         time.sleep(1)
-    #         if conn is not None:
-    #             get_all_news(conn)
-    #             if CURRENT_TIME == TIME_TO_PURGE:
-    #                 logging.info(
-    #                     f"Time to purge has come ! Entities in db for now: {__check_entities_count(conn)}"
-    #                 )
-    #                 delete_all_news(conn)
-    #             else:
-    #                 logging.info(
-    #                     f"Still waiting for purging. Entities in db for now: {__check_entities_count(conn)}"
-    #                 )
-    # except sqlite3.Error as sql_err:
-    #     logging.error(f"Cannot create the database connection. Error: {sql_err}")
     pass
