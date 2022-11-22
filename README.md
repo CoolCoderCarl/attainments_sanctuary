@@ -13,3 +13,5 @@ Enjoy.
 It is a second part of searching project and ETL pipeline
 
 After Extraction & Transformation save data in SQLite database
+
+Check the main repo - https://github.com/CoolCoderCarl/datapath - get `docker-compose.yaml`
