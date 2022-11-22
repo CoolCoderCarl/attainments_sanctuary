@@ -8,8 +8,7 @@ COPY ["news_db.py", "/opt/"]
 COPY requirements.txt requirements.txt
 
 RUN pip3 install --no-cache-dir -r requirements.txt
-RUN apt update -y
-RUN apt install -y curl jq
+RUN apk add curl jq
 
 FROM builder
 
