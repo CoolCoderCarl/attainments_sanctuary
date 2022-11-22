@@ -41,7 +41,6 @@ async def healthcheck():
 async def news():
     """
     Get data from DB and return it to API client
-    Disconnect
     :return:
     """
     await database.connect()
@@ -57,7 +56,6 @@ async def purge():
     """
     Delete all data from news db, commit changes into delete_all_news() method
     In case of err rollback
-    Close connection
     :return:
     """
     try:
