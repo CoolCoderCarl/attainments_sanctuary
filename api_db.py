@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+from typing import Dict, List
 
 import uvicorn
 from databases import Database
@@ -29,7 +30,7 @@ ndb = news_db.NewsDatabase()
 
 
 @app.get("/healthcheck", status_code=status.HTTP_200_OK)
-async def healthcheck():
+async def healthcheck() -> Dict:
     """
     Healthcheck of API
     :return:
@@ -38,10 +39,9 @@ async def healthcheck():
 
 
 @app.get("/news")
-async def news():
+async def news() -> List:
     """
     Get data from DB and return it to API client
-    Disconnect
     :return:
     """
     await database.connect()
@@ -57,7 +57,6 @@ async def purge():
     """
     Delete all data from news db, commit changes into delete_all_news() method
     In case of err rollback
-    Close connection
     :return:
     """
     try:
@@ -82,4 +81,4 @@ async def insert(data: list):
 
 if __name__ == "__main__":
     uvicorn.run(app, port=8888, host="0.0.0.0")
-    # uvicorn.run(app, port=8888) # Use for local testing
+    # uvicorn.run(app, port=8888)  # Use for local testing
