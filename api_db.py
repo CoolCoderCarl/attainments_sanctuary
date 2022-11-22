@@ -3,8 +3,7 @@ from pathlib import Path
 
 import uvicorn
 from databases import Database
-from fastapi import FastAPI, File, Form, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, status
 
 import news_db
 
@@ -28,27 +27,24 @@ database = Database(f"sqlite:///{DATABASE_NAME}")
 
 ndb = news_db.NewsDatabase()
 
-# @app.on_event("startup")
-# async def database_connect():
-#     await database.connect()
-#
-#
-# @app.on_event("shutdown")
-# async def database_disconnect():
-#     await database.disconnect()
 
-
-@app.get("/")
-async def status():
-    return 0
+@app.get("/healthcheck", status_code=status.HTTP_200_OK)
+async def healthcheck():
+    """
+    Healthcheck of API
+    :return:
+    """
+    return {"healthcheck": "True"}
 
 
 @app.get("/news")
-# async def fetch_data(id: int):
-async def fetch_data():
-    # ndb.create_connection(DATABASE_NAME)
+async def news():
+    """
+    Get data from DB and return it to API client
+    Disconnect
+    :return:
+    """
     await database.connect()
-    # query = "SELECT * FROM news" #.format(str(id))
     await database.execute(query=ndb.CREATE_TABLE_SQL)
     results = await database.fetch_all(query=ndb.SELECT_FROM_SQL)
     await database.disconnect()
@@ -58,38 +54,32 @@ async def fetch_data():
 
 @app.get("/purge")
 async def purge():
-    # await database.connect()
+    """
+    Delete all data from news db, commit changes into delete_all_news() method
+    In case of err rollback
+    Close connection
+    :return:
+    """
     try:
         await ndb.delete_all_news(ndb.create_connection(DATABASE_NAME))
     except:
         await database.transaction().rollback()
         logging.warning("Rollback database transaction ! Purging canceled !")
-    else:
-        await database.transaction().commit()
-        # AttributeError: 'Transaction' object has no attribute '_connection'
-        logging.info("Database was purged successfully !")
 
     await database.disconnect()
 
 
 @app.post("/insert")
 async def insert(data: list):
-    # await database.connect()
+    """
+    Insert data to SQLite and close connection
+    :param data:
+    :return:
+    """
     ndb.insert_into(ndb.create_connection(DATABASE_NAME), data)
-    # try:
-    #     pass
-    # await ndb.delete_all_news(ndb.create_connection(DATABASE_NAME))
-    # except:
-    #     await database.transaction().rollback()
-    # else:
-    #     await database.transaction().commit()
-
-    # result = await database.execute(query=ndb.SELECT_COUNT_SQL)
-
     await database.disconnect()
-    # return result
 
 
 if __name__ == "__main__":
     uvicorn.run(app, port=8888, host="0.0.0.0")
-    # uvicorn.run(app, port=8888)
+    # uvicorn.run(app, port=8888) # Use for local testing
