@@ -22,7 +22,7 @@ logging.basicConfig(
 app = FastAPI()
 
 ndb = news_db.NewsDatabase()
-
+ndb.create_table(ndb.create_connection(ndb.DATABASE_NAME))
 database = Database(f"sqlite:///{ndb.DATABASE_NAME}")
 
 
@@ -60,9 +60,10 @@ async def purge():
     """
     try:
         await ndb.delete_all_news(ndb.create_connection(ndb.DATABASE_NAME))
-    except:
+    except Exception as exception:
         await database.transaction().rollback()
         logging.warning("Rollback database transaction ! Purging canceled !")
+        logging.error(exception)
     finally:
         await database.disconnect()
 

@@ -115,5 +115,4 @@ class NewsDatabase:
 
 
 if __name__ == "__main__":
-    ndb = NewsDatabase()
-    ndb.create_table(ndb.create_connection(ndb.DATABASE_NAME))
+    pass
