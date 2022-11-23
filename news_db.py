@@ -13,6 +13,9 @@ logging.basicConfig(
 
 
 class NewsDatabase:
+
+    DATABASE_NAME = Path("news_database.db")
+
     # SQL queries
     CREATE_TABLE_SQL = """
     CREATE TABLE IF NOT EXISTS news (
@@ -59,15 +62,14 @@ class NewsDatabase:
             logging.error(create_conn_err)
         return None
 
-    def create_table(self, conn, create_table_query):
+    def create_table(self, conn):
         """
         :param conn: Connection to the SQLite database
-        :param create_table_query:
         :return:
         """
         try:
             c = conn.cursor()
-            c.execute(create_table_query)
+            c.execute(self.CREATE_TABLE_SQL)
             logging.info(f"Table created successfully !")
         except Error as create_table_err:
             logging.error(create_table_err)
@@ -113,4 +115,5 @@ class NewsDatabase:
 
 
 if __name__ == "__main__":
-    pass
+    ndb = NewsDatabase()
+    ndb.create_table(ndb.create_connection(ndb.DATABASE_NAME))
