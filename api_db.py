@@ -79,6 +79,18 @@ async def insert(data: list):
     await database.disconnect()
 
 
+@app.get("/entities")
+async def entities() -> int:
+    """
+    Check how much entities in db for now
+    :param data:
+    :return:
+    """
+    entities = ndb.check_entities_count(ndb.create_connection(ndb.DATABASE_NAME))
+    await database.disconnect()
+    return entities
+
+
 if __name__ == "__main__":
     uvicorn.run(app, port=8888, host="0.0.0.0")
     # uvicorn.run(app, port=8888)  # Use for local testing

@@ -45,7 +45,7 @@ class NewsDatabase:
     SELECT COUNT(*) FROM news;
     """
 
-    def __check_entities_count(self, conn):
+    def check_entities_count(self, conn) -> int:
         return conn.cursor().execute(self.SELECT_COUNT_SQL).fetchone()[0]
 
     def create_connection(self, db_file: Path):
@@ -87,7 +87,7 @@ class NewsDatabase:
             cur.execute(self.INSERT_INTO_SQL, data)
             conn.commit()
             logging.info(
-                f"Data inserted successfully ! Entities in db for now: {self.__check_entities_count(conn)}"
+                f"Data inserted successfully ! Entities in db for now: {self.check_entities_count(conn)}"
             )
             return cur.lastrowid
         except Error as insert_err:
@@ -110,7 +110,7 @@ class NewsDatabase:
         conn.cursor().execute(self.DELETE_FROM_SQL)
         conn.commit()
         logging.info(
-            f"Database was purged ! Entities in db for now: {self.__check_entities_count(conn)}"
+            f"Database was purged ! Entities in db for now: {self.check_entities_count(conn)}"
         )
 
 
