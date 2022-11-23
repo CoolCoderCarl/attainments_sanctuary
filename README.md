@@ -1,8 +1,9 @@
 # attainments_sanctuary
-Combination of FastAPI and SQLite
+Combination of FastAPI and SQLite.
+Second part of a system which search, save and share info.
 
 ## Prehistory
-SQLite database hidden behind FastAPI 
+Need to save info before sending.
 
 > After good work it is necessary to save all results   
 > (c) Author
