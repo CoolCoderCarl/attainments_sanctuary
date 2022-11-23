@@ -1,5 +1,4 @@
 import logging
-from pathlib import Path
 
 import uvicorn
 from databases import Database
@@ -21,11 +20,9 @@ logging.basicConfig(
 
 app = FastAPI()
 
-DATABASE_NAME = Path("news_database.db")
-
-database = Database(f"sqlite:///{DATABASE_NAME}")
-
 ndb = news_db.NewsDatabase()
+
+database = Database(f"sqlite:///{ndb.DATABASE_NAME}")
 
 
 @app.get("/healthcheck", status_code=status.HTTP_200_OK)
@@ -61,12 +58,12 @@ async def purge():
     :return:
     """
     try:
-        await ndb.delete_all_news(ndb.create_connection(DATABASE_NAME))
+        await ndb.delete_all_news(ndb.create_connection(ndb.DATABASE_NAME))
     except:
         await database.transaction().rollback()
         logging.warning("Rollback database transaction ! Purging canceled !")
-
-    await database.disconnect()
+    finally:
+        await database.disconnect()
 
 
 @app.post("/insert")
@@ -76,10 +73,10 @@ async def insert(data: list):
     :param data:
     :return:
     """
-    ndb.insert_into(ndb.create_connection(DATABASE_NAME), data)
+    ndb.insert_into(ndb.create_connection(ndb.DATABASE_NAME), data)
     await database.disconnect()
 
 
 if __name__ == "__main__":
     uvicorn.run(app, port=8888, host="0.0.0.0")
-    # uvicorn.run(app, port=8888) # Use for local testing
+    # uvicorn.run(app, port=8888)  # Use for local testing
