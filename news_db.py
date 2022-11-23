@@ -13,6 +13,9 @@ logging.basicConfig(
 
 
 class NewsDatabase:
+
+    DATABASE_NAME = Path("news_database.db")
+
     # SQL queries
     CREATE_TABLE_SQL = """
     CREATE TABLE IF NOT EXISTS news (
@@ -42,7 +45,7 @@ class NewsDatabase:
     SELECT COUNT(*) FROM news;
     """
 
-    def __check_entities_count(self, conn):
+    def check_entities_count(self, conn) -> int:
         return conn.cursor().execute(self.SELECT_COUNT_SQL).fetchone()[0]
 
     def create_connection(self, db_file: Path):
@@ -59,15 +62,14 @@ class NewsDatabase:
             logging.error(create_conn_err)
         return None
 
-    def create_table(self, conn, create_table_query):
+    def create_table(self, conn):
         """
         :param conn: Connection to the SQLite database
-        :param create_table_query:
         :return:
         """
         try:
             c = conn.cursor()
-            c.execute(create_table_query)
+            c.execute(self.CREATE_TABLE_SQL)
             logging.info(f"Table created successfully !")
         except Error as create_table_err:
             logging.error(create_table_err)
@@ -85,7 +87,7 @@ class NewsDatabase:
             cur.execute(self.INSERT_INTO_SQL, data)
             conn.commit()
             logging.info(
-                f"Data inserted successfully ! Entities in db for now: {self.__check_entities_count(conn)}"
+                f"Data inserted successfully ! Entities in db for now: {self.check_entities_count(conn)}"
             )
             return cur.lastrowid
         except Error as insert_err:
@@ -108,7 +110,7 @@ class NewsDatabase:
         conn.cursor().execute(self.DELETE_FROM_SQL)
         conn.commit()
         logging.info(
-            f"Database was purged ! Entities in db for now: {self.__check_entities_count(conn)}"
+            f"Database was purged ! Entities in db for now: {self.check_entities_count(conn)}"
         )
 
 

@@ -1,8 +1,9 @@
 # attainments_sanctuary
-Combination of FastAPI and SQLite
+Combination of FastAPI and SQLite.
+Second part of a system which search, save and share info.
 
 ## Prehistory
-SQLite database hidden behind FastAPI 
+Need to save info before sending.
 
 > After good work it is necessary to save all results   
 > (c) Author
@@ -10,8 +11,10 @@ SQLite database hidden behind FastAPI
 Enjoy.
 
 ## How to use 
-It is a second part of searching project and ETL pipeline
+Just run `docker-compose up -d` or `make dstart`
 
-After Extraction & Transformation save data in SQLite database
+For more info check:
+1) Telegram sender repo - https://github.com/CoolCoderCarl/datapath 
+2) ETL repo - https://github.com/CoolCoderCarl/epistolary
 
-Check the main repo - https://github.com/CoolCoderCarl/datapath - get `docker-compose.yaml`
+**Still have questions ? Google it.**
