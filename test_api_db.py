@@ -8,7 +8,7 @@ API_URL = "http://127.0.0.1:8888"
 
 def test_healthcheck():
     response = requests.get(f"{API_URL}/healthcheck")
-    assert bool(response.json()["healthcheck"]) == True
+    assert response.json()["healthcheck"] == True
 
 
 def test_insert():
