@@ -110,7 +110,7 @@ class NewsDatabase:
         conn.cursor().execute(self.DELETE_FROM_SQL)
         conn.commit()
         logging.info(
-            f"Database was purged ! Entities in db for now: {self.check_entities_count(conn)}"
+            f"Database was purged successfully ! Entities in db for now: {self.check_entities_count(conn)}"
         )
 
 
