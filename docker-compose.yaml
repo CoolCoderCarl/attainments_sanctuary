@@ -12,7 +12,7 @@ services:
       - "8888:8888"
     healthcheck:
       test: "curl http://attainments_sanctuary:8888/healthcheck | jq -r '.healthcheck'"
-      start_period: 5s
+      start_period: 10s
       interval: 5s
       timeout: 5s
       retries: 20
