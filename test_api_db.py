@@ -8,7 +8,7 @@ API_URL = "http://127.0.0.1:8888"
 
 def test_healthcheck():
     response = requests.get(f"{API_URL}/healthcheck")
-    assert bool(response.json()["healthcheck"]) == True
+    assert response.json()["healthcheck"] == True
 
 
 def test_insert():
@@ -29,9 +29,10 @@ def test_purge():
     assert response.status_code == 200
 
 
+def test_entities():
+    response = int(requests.get(f"{API_URL}/entities").text)
+    assert isinstance(response, int)
+
+
 if __name__ == "__main__":
-    test_healthcheck()
-    test_insert()
-    test_get_news()
-    test_purge()
-    test_get_news()
+    pass

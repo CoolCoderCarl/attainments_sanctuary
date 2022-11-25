@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+from typing import Dict, List
 
 import uvicorn
 from databases import Database
@@ -21,24 +22,29 @@ logging.basicConfig(
 
 app = FastAPI()
 
-DATABASE_NAME = Path("news_database.db")
-
-database = Database(f"sqlite:///{DATABASE_NAME}")
-
 ndb = news_db.NewsDatabase()
+ndb.create_table(ndb.create_connection(ndb.DATABASE_NAME))
+database = Database(f"sqlite:///{ndb.DATABASE_NAME}")
 
 
 @app.get("/healthcheck", status_code=status.HTTP_200_OK)
-async def healthcheck():
+async def healthcheck() -> Dict:
     """
     Healthcheck of API
     :return:
     """
-    return {"healthcheck": "True"}
+    try:
+        if Path(ndb.DATABASE_NAME).exists():
+            return {"healthcheck": True}
+        else:
+            raise FileExistsError
+    except FileExistsError as file_err:
+        logging.error(file_err)
+        return {"healthcheck": False}
 
 
 @app.get("/news")
-async def news():
+async def news() -> List:
     """
     Get data from DB and return it to API client
     Disconnect
@@ -61,12 +67,13 @@ async def purge():
     :return:
     """
     try:
-        await ndb.delete_all_news(ndb.create_connection(DATABASE_NAME))
-    except:
+        await ndb.delete_all_news(ndb.create_connection(ndb.DATABASE_NAME))
+    except Exception as exception:
         await database.transaction().rollback()
         logging.warning("Rollback database transaction ! Purging canceled !")
-
-    await database.disconnect()
+        logging.error(exception)
+    finally:
+        await database.disconnect()
 
 
 @app.post("/insert")
@@ -76,10 +83,22 @@ async def insert(data: list):
     :param data:
     :return:
     """
-    ndb.insert_into(ndb.create_connection(DATABASE_NAME), data)
+    ndb.insert_into(ndb.create_connection(ndb.DATABASE_NAME), data)
     await database.disconnect()
+
+
+@app.get("/entities")
+async def entities() -> int:
+    """
+    Check how much entities in db for now
+    :param data:
+    :return:
+    """
+    entities = ndb.check_entities_count(ndb.create_connection(ndb.DATABASE_NAME))
+    await database.disconnect()
+    return entities
 
 
 if __name__ == "__main__":
     uvicorn.run(app, port=8888, host="0.0.0.0")
-    # uvicorn.run(app, port=8888) # Use for local testing
+    # uvicorn.run(app, port=8888)  # Use for local testing
