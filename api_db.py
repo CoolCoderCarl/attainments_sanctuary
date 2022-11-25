@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 from typing import Dict, List
 
 import uvicorn
@@ -32,7 +33,14 @@ async def healthcheck() -> Dict:
     Healthcheck of API
     :return:
     """
-    return {"healthcheck": "True"}
+    try:
+        if Path(ndb.DATABASE_NAME).exists():
+            return {"healthcheck": True}
+        else:
+            raise FileExistsError
+    except FileExistsError as file_err:
+        logging.error(file_err)
+        return {"healthcheck": False}
 
 
 @app.get("/news")
