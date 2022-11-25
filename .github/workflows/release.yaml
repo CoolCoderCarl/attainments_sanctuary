@@ -160,8 +160,6 @@ jobs:
 
             <b>Pushed image:</b> <code>docker pull h0d0user/attainments_sanctuary:latest</code>
 
-            See changes: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
-
             <b>Release URL:</b> https://github.com/${{ github.repository }}/releases/tag/${{ needs.prepare.outputs.get_current_tag }}
 
             See changes: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
